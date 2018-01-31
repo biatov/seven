@@ -16,10 +16,16 @@ NEWSPIDER_MODULE = 'seven.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'seven (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.91 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+
+ITEM_PIPELINES = {
+   'seven.pipelines.SevenPipeline': 300,
+}
+
+LOG_LEVEL = 'INFO'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

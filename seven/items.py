@@ -9,6 +9,9 @@ import scrapy
 
 
 class SevenItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    for_whom = scrapy.Field()
+    title = scrapy.Field()
+    value = scrapy.Field()
+    image = scrapy.Field()
+    description = scrapy.Field()
+    filters = scrapy.Field()
