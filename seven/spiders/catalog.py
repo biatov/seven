@@ -1,5 +1,4 @@
 import scrapy
-from scrapy.exceptions import CloseSpider
 from ..items import SevenItem
 
 import re
@@ -16,7 +15,6 @@ class Catalog(scrapy.Spider):
         if trading_urls:
             for url in trading_urls:
                 yield scrapy.Request(response.urljoin(url), callback=self.parse_trading_house)
-
 
     def parse_trading_house(self, response):
         products_xpath = '//a[@class="brnnew"]/@href'
@@ -40,8 +38,11 @@ class Catalog(scrapy.Spider):
             return element
 
         def for_(whom):
-            if whom[-2:] in 'ая':
-                return ''.join([whom[:-2], 'ий'])
+            end = 'ая'
+            if whom[-2:] in 'ий':
+                return ''.join([whom[:-2], end])
+            elif whom[-2:] in 'ой':
+                return ''.join([whom[:-2], end])
             return whom
 
         first_filter = find_element('//b[contains(text(), "аромат")]/text()')
