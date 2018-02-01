@@ -14,5 +14,6 @@ class SevenItem(scrapy.Item):
     value = scrapy.Field()
     images = scrapy.Field()
     image_urls = scrapy.Field()
+    photos = scrapy.Field()
     description = scrapy.Field()
     filters = scrapy.Field()

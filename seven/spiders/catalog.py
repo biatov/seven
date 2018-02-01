@@ -24,7 +24,6 @@ class Catalog(scrapy.Spider):
                 yield scrapy.Request(response.urljoin(url), callback=self.parse_product)
 
     def parse_product(self, response):
-        product = SevenItem()
         no_data = ''
 
         def find_element(xpath_value, array=False):
@@ -45,39 +44,43 @@ class Catalog(scrapy.Spider):
                 return ''.join([whom[:-2], end])
             return whom
 
-        first_filter = find_element('//b[contains(text(), "аромат")]/text()')
-        try:
-            product['for_whom'] = for_(first_filter.split()[0].lower())
-        except (AttributeError, IndexError, TypeError):
-            product['for_whom'] = no_data
-
-        product['title'] = find_element('//h1/text()')
-        product['value'] = ', '.join(find_element(
+        values = find_element(
             '//span[contains(@onmouseover, "код товара")]'
             '/parent::td/following-sibling::td[@class="title_mini" and @width="300"]'
             '/text()',
             array=True
-        ))
-        product['image_urls'] = list(
-            map(
-                lambda i: i if 'http' in i else ''.join(
-                    [
-                        self.start_urls[0],
-                        i[1:]
-                    ]
-                ),
-                find_element('//img[@onclick="setBigImage(this)"]/@src', array=True)
-            )
         )
-        try:
-            description = re.sub('<[^>]*>', '', find_element('//p[@itemprop="description"]'))
-            description = re.sub('\s+', ' ', description)[10:]
-        except AttributeError:
-            description = no_data
-        product['description'] = description
+        for each_value in values:
+            product = SevenItem()
+            first_filter = find_element('//b[contains(text(), "аромат")]/text()')
+            try:
+                product['for_whom'] = for_(first_filter.split()[0].lower())
+            except (AttributeError, IndexError, TypeError):
+                product['for_whom'] = no_data
 
-        filters = find_element('//b[contains(text(), "аромат")]/parent::span/parent::td/text()', array=True)
-        filters = list(map(lambda i: re.sub('(\(\d*\))*', '', i).strip(), filters))
-        filters.insert(0, first_filter)
-        product['filters'] = ', '.join(filters)
-        yield product
+            product['title'] = find_element('//h1/text()')
+            product['value'] = each_value
+            product['image_urls'] = list(
+                map(
+                    lambda i: i if 'http' in i else ''.join(
+                        [
+                            self.start_urls[0],
+                            i[1:]
+                        ]
+                    ),
+                    find_element('//img[@onclick="setBigImage(this)"]/@src', array=True)
+                )
+            )
+            product['photos'] = ', '.join(product['image_urls'])
+            try:
+                description = re.sub('<[^>]*>', '', find_element('//p[@itemprop="description"]'))
+                description = re.sub('\s+', ' ', description)[10:]
+            except AttributeError:
+                description = no_data
+            product['description'] = description
+
+            filters = find_element('//b[contains(text(), "аромат")]/parent::span/parent::td/text()', array=True)
+            filters = list(map(lambda i: re.sub('(\(\d*\))*', '', i).strip(), filters))
+            filters.insert(0, first_filter)
+            product['filters'] = ', '.join(filters)
+            yield product

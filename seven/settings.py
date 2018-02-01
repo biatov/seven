@@ -28,7 +28,7 @@ ITEM_PIPELINES = {
    'seven.pipelines.SevenPipeline': 300,
 }
 
-# LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'INFO'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
