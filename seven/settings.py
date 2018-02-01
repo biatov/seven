@@ -21,11 +21,14 @@ USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
+IMAGES_STORE = 'images'
+
 ITEM_PIPELINES = {
+   'scrapy.pipelines.images.ImagesPipeline': 1,
    'seven.pipelines.SevenPipeline': 300,
 }
 
-LOG_LEVEL = 'INFO'
+# LOG_LEVEL = 'INFO'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

@@ -58,7 +58,7 @@ class Catalog(scrapy.Spider):
             '/text()',
             array=True
         ))
-        product['image'] = ', '.join(
+        product['image_urls'] = list(
             map(
                 lambda i: i if 'http' in i else ''.join(
                     [

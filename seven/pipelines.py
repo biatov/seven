@@ -15,6 +15,6 @@ class SevenPipeline(object):
         self.file.writerow(['Для кого', 'Наименование', 'Тип/объем в милилитрах', 'Фото', 'Описание', 'Фильтры'])
 
     def process_item(self, item, spider):
-        self.file.writerow([item['for_whom'], item['title'], item['value'], item['image'], item['description'],
+        self.file.writerow([item['for_whom'], item['title'], item['value'], item['image_urls'], item['description'],
                             item['filters']])
         return item
